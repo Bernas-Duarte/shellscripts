@@ -1,26 +1,26 @@
 #!/bin/bash
-echo Installing Yay
-# pacman -S git
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-echo Updating Packages
-# pacman -Syyu
-echo Installing Dependencies
-# yay -S spicetify-cli btop fish neofetch kitty polybar rofi picom-pijulius-git stalonetray polybar-spotify-module lxappearance-gtk3 nitrogen nautilus xdo spotify discord-canary dunst
-echo Installing and configuring Dotfiles
-cd ..
-git clone https://github.com/Dueel/dotfiles.git -b catppuccin-bspwm
-cd dotfiles
-mv ~/.config/polybar/ ~/.config/polybar.old/
-mv ~/.config/rofi/ ~/.config/rofi.old/
-mv ~/.config/bspwm/ ~/.config/bspwm.old/
-mv ~/.config/sxhkd/ ~/.config/sxhkd.old/
-mv ~/.config/neofetch/ ~/.config/neofetch.old/
-mv ~/.config/kitty/ ~/.config/kitty.old/
-cp -r .config/* ~/.config/
-cp -r .local/* ~/.local/
-cp -r .stalonetrayrc /home/$USER/
-echo Ending Installation
-#pacman -Syyu
-startx
+
+# Create a timestamp for the backup
+timestamp=$(date +%Y-%m-%d_%H-%M-%S)
+
+# Set the backup filename
+filename="Fresh_Install_$timestamp.tar.gz"
+
+# Set the directories to backup
+directories=(
+    "/etc"
+    "/home"
+    "/var"
+)
+
+# Set the exclude patterns for rsync
+exclude=(
+    "--exclude=/home/*/Downloads"
+    "--exclude=/var/cache"
+)
+
+# Create the backup archive
+sudo tar czvf "/root/$filename" "${directories[@]}" "${exclude[@]}"
+
+# Print the backup location
+echo "Backup created: /root/$filename"
